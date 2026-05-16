@@ -261,3 +261,28 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* ===== Star Rating Styles ===== */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  margin: 0.3em 0;
+}
+
+.stars {
+  font-size: 1.1em;
+  letter-spacing: 0.05em;
+  color: var(--light-grey);
+}
+
+.stars.filled {
+  color: var(--primary-color);
+}
+
+.review-count {
+  font-size: var(--small-font);
+  color: var(--dark-grey);
+  opacity: 0.7;
+}
+/* ===== End Star Rating Styles ===== */
