@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sleep Outside | Home</title>
-    <script type="module" crossorigin src="/WDD-330/assets/main-CNxowqSM.js"></script>
-    <link rel="modulepreload" crossorigin href="/WDD-330/assets/style-DBrVy-ya.js">
-    <link rel="stylesheet" crossorigin href="/WDD-330/assets/style-xwUv_Lyn.css">
+    <script type="module" crossorigin src="/WDD-330/assets/main-g6U5-QlE.js"></script>
+    <link rel="modulepreload" crossorigin href="/WDD-330/assets/style-fcItbyL5.js">
+    <link rel="stylesheet" crossorigin href="/WDD-330/assets/style-C2TixV29.css">
   </head>
 
   <body>
@@ -64,6 +64,21 @@
 
       <section class="products">
         <h2>Top Products</h2>
+        <div class="product-controls">
+          <input
+            type="search"
+            id="product-search"
+            class="product-search"
+            placeholder="Search products..."
+            aria-label="Search products"
+          />
+          <select id="product-sort" class="product-sort" aria-label="Sort products">
+            <option value="default">Sort by: Default</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A to Z</option>
+          </select>
+        </div>
         <ul class="product-list">
           <li class="product-card">
             <a href="product_pages/marmot-ajax-3.html">
