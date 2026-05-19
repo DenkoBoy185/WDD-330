@@ -286,3 +286,57 @@ footer {
   opacity: 0.7;
 }
 /* ===== End Star Rating Styles ===== */
+
+/* ===== Product Controls (Search + Sort) ===== */
+.product-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 1rem;
+  background-color: #faf7f3;
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+}
+
+.product-search {
+  flex: 1 1 200px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+  outline: none;
+  font-family: var(--font-body);
+}
+
+.product-search:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(240, 168, 104, 0.25);
+}
+
+.product-sort {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.product-sort:focus {
+  border-color: var(--primary-color);
+}
+
+.no-results {
+  list-style: none;
+  text-align: center;
+  padding: 2rem;
+  color: var(--dark-grey);
+  opacity: 0.6;
+  width: 100%;
+  font-style: italic;
+}
+/* ===== End Product Controls ===== */
