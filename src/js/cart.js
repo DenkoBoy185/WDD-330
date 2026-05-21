@@ -5,7 +5,8 @@
  *  - Null-safe cart rendering (no crash on empty cart)
  *  - Empty-cart message with link back to shop
  *  - Remove-from-cart buttons
- *  - Live cart total
+ *  - Quantity stepper (+/-) per item with localStorage persistence
+ *  - Live cart total (respects quantities)
  *  - Wishlist / Save-for-Later section
  *  - Cart count badge sync
  */
@@ -13,8 +14,35 @@
 import { getLocalStorage, setLocalStorage, updateCartCount } from './utils.mjs';
 import { renderWishListSection } from './WishList.mjs';
 
+const QTY_KEY = 'so-cart-qty';
+
+/** Return the quantity map object { [productId]: qty }. */
+function getQtyMap() {
+  return getLocalStorage(QTY_KEY) || {};
+}
+
+/** Persist the quantity map. */
+function saveQtyMap(map) {
+  setLocalStorage(QTY_KEY, map);
+}
+
+/** Get quantity for a specific product (default 1). */
+function getQty(productId) {
+  const map = getQtyMap();
+  return map[productId] || 1;
+}
+
+/** Set quantity for a specific product (min 1). */
+function setQty(productId, qty) {
+  const map = getQtyMap();
+  map[productId] = Math.max(1, qty);
+  saveQtyMap(map);
+}
+
 /** Build one cart row from a product object. */
 function cartItemTemplate(item, index) {
+  const qty = getQty(item.Id);
+  const lineTotal = (parseFloat(item.FinalPrice) * qty).toFixed(2);
   return `
     <li class="cart-card divider">
       <a href="#" class="cart-card__image">
@@ -24,8 +52,12 @@ function cartItemTemplate(item, index) {
         <h2 class="card__name">${item.Name}</h2>
       </a>
       <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-      <p class="cart-card__quantity">qty: 1</p>
-      <p class="cart-card__price">$${item.FinalPrice}</p>
+      <div class="cart-card__qty-control" data-id="${item.Id}">
+        <button class="qty-btn qty-decrement" aria-label="Decrease quantity">−</button>
+        <span class="qty-value">${qty}</span>
+        <button class="qty-btn qty-increment" aria-label="Increase quantity">+</button>
+      </div>
+      <p class="cart-card__price" data-id="${item.Id}">$${lineTotal}</p>
       <button
         class="cart-remove-btn"
         data-index="${index}"
@@ -38,22 +70,79 @@ function cartItemTemplate(item, index) {
 function removeFromCart(e) {
   const index = parseInt(e.currentTarget.dataset.index, 10);
   const cart = getLocalStorage('so-cart') || [];
-  cart.splice(index, 1);
+  const removed = cart.splice(index, 1);
+
+  // Clean up qty entry for removed item
+  if (removed.length) {
+    const map = getQtyMap();
+    delete map[removed[0].Id];
+    saveQtyMap(map);
+  }
+
   setLocalStorage('so-cart', cart);
   renderCartContents();
   updateCartCount();
 }
 
-/** Render the running cart total beneath the list. */
+/** Recalculate and display the running cart total (respects quantities). */
 function renderCartTotal(cartItems) {
-  const total = cartItems.reduce(
-    (sum, item) => sum + parseFloat(item.FinalPrice),
-    0,
-  );
+  const total = cartItems.reduce((sum, item) => {
+    return sum + parseFloat(item.FinalPrice) * getQty(item.Id);
+  }, 0);
   const totalEl = document.getElementById('cart-total');
   if (totalEl) {
     totalEl.textContent = `Total: $${total.toFixed(2)}`;
   }
+}
+
+/**
+ * Update just the price cell and total for a product without a full re-render.
+ * Called by qty stepper buttons.
+ */
+function updateLinePrice(productId, unitPrice, cartItems) {
+  const qty = getQty(productId);
+  const lineTotal = (parseFloat(unitPrice) * qty).toFixed(2);
+
+  // Update qty display
+  const control = document.querySelector(`.cart-card__qty-control[data-id="${productId}"]`);
+  if (control) {
+    control.querySelector('.qty-value').textContent = qty;
+  }
+
+  // Update line price display
+  const priceEl = document.querySelector(`.cart-card__price[data-id="${productId}"]`);
+  if (priceEl) {
+    priceEl.textContent = `$${lineTotal}`;
+  }
+
+  renderCartTotal(cartItems);
+}
+
+/** Attach quantity stepper listeners after render. */
+function attachQtyListeners(cartItems) {
+  document.querySelectorAll('.qty-increment').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const control = e.currentTarget.closest('.cart-card__qty-control');
+      const id = control.dataset.id;
+      const item = cartItems.find((i) => i.Id === id);
+      if (!item) return;
+      setQty(id, getQty(id) + 1);
+      updateLinePrice(id, item.FinalPrice, cartItems);
+    });
+  });
+
+  document.querySelectorAll('.qty-decrement').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const control = e.currentTarget.closest('.cart-card__qty-control');
+      const id = control.dataset.id;
+      const item = cartItems.find((i) => i.Id === id);
+      if (!item) return;
+      const newQty = getQty(id) - 1;
+      if (newQty < 1) return; // Don't go below 1
+      setQty(id, newQty);
+      updateLinePrice(id, item.FinalPrice, cartItems);
+    });
+  });
 }
 
 /** Main render function — reads localStorage and paints the full cart UI. */
@@ -82,6 +171,9 @@ function renderCartContents() {
     btn.addEventListener('click', removeFromCart);
   });
 
+  // Attach qty stepper listeners
+  attachQtyListeners(cartItems);
+
   renderCartTotal(cartItems);
 }
 
@@ -89,4 +181,3 @@ function renderCartContents() {
 renderCartContents();
 updateCartCount();
 renderWishListSection();
-
