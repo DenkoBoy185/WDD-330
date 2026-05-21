@@ -340,3 +340,212 @@ footer {
   font-style: italic;
 }
 /* ===== End Product Controls ===== */
+
+/* ===== Cart Count Badge ===== */
+.cart {
+  position: relative;
+}
+
+#cart-count {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: -6px;
+  background-color: var(--tertiary-color);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  padding: 0 4px;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
+/* ===== End Cart Count Badge ===== */
+
+/* ===== Cart Page Enhancements ===== */
+.cart-card {
+  position: relative;
+  grid-template-columns: 25% auto 15% auto;
+}
+
+.cart-remove-btn {
+  background: none;
+  border: 1px solid var(--light-grey);
+  color: var(--dark-grey);
+  font-size: 0.75rem;
+  padding: 0.2em 0.5em;
+  cursor: pointer;
+  border-radius: 3px;
+  grid-row: 1;
+  grid-column: 4;
+  margin: 0;
+  align-self: center;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.cart-remove-btn:hover {
+  background-color: #c0392b;
+  color: white;
+  border-color: #c0392b;
+}
+
+.cart-empty {
+  list-style: none;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--dark-grey);
+  opacity: 0.7;
+  width: 100%;
+  font-style: italic;
+}
+
+.cart-empty a {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--tertiary-color);
+  text-decoration: underline;
+}
+
+#cart-total {
+  text-align: right;
+  font-size: 1.15rem;
+  font-weight: bold;
+  padding: 0.75rem 1rem;
+  border-top: 2px solid var(--primary-color);
+  margin-top: 0.5rem;
+  color: var(--dark-grey);
+}
+
+@media screen and (min-width: 500px) {
+  .cart-card {
+    grid-template-columns: 150px auto 15% auto;
+  }
+}
+/* ===== End Cart Page Enhancements ===== */
+
+/* ===== Product Detail — Button Group ===== */
+.product-detail__add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.btn-wishlist {
+  padding: 0.5em 2em;
+  background-color: white;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  font-size: var(--large-font);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-wishlist:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-wishlist--saved {
+  background-color: #f9edf5;
+  border-color: #9b59b6;
+  color: #9b59b6;
+}
+/* ===== End Product Detail — Button Group ===== */
+
+/* ===== Wishlist Section ===== */
+.wishlist-section {
+  margin-top: 2.5rem;
+  padding: 1rem;
+  border-top: 2px solid var(--light-grey);
+}
+
+.wishlist-section h2 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: var(--dark-grey);
+}
+
+.wishlist-list {
+  list-style: none;
+  padding: 0;
+}
+
+.wishlist-card {
+  display: grid;
+  grid-template-columns: 70px 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.wishlist-card__image {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.wishlist-card__info .card__name {
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.wishlist-card__price {
+  font-weight: bold;
+  color: var(--tertiary-color);
+  margin: 0;
+}
+
+.wishlist-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.wishlist-move-btn {
+  padding: 0.35em 0.85em;
+  background-color: var(--secondary-color);
+  color: white;
+  border: 0;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 3px;
+  margin: 0;
+  transition: opacity 0.15s;
+}
+
+.wishlist-move-btn:hover {
+  opacity: 0.85;
+}
+
+.wishlist-remove-btn {
+  padding: 0.35em 0.85em;
+  background-color: white;
+  color: var(--dark-grey);
+  border: 1px solid var(--light-grey);
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 3px;
+  margin: 0;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.wishlist-remove-btn:hover {
+  background-color: #c0392b;
+  color: white;
+  border-color: #c0392b;
+}
+
+.wishlist-empty {
+  color: var(--dark-grey);
+  opacity: 0.6;
+  font-style: italic;
+  padding: 1rem 0;
+}
+/* ===== End Wishlist Section ===== */

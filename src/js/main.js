@@ -1,10 +1,22 @@
 /**
  * main.js
- * Product filter and sort functionality for the Sleep Outside homepage.
- * Task: Add product search filter and sort controls
+ * Homepage entry point for Sleep Outside.
+ * - Product search filter and sort controls
+ * - Star rating display on product cards
+ * - Cart count badge sync
  */
 
+import { injectStarRatings } from './StarRating.mjs';
+import { updateCartCount } from './utils.mjs';
+
 document.addEventListener('DOMContentLoaded', () => {
+  // ── Star ratings ──────────────────────────────────────────────
+  injectStarRatings();
+
+  // ── Cart badge ────────────────────────────────────────────────
+  updateCartCount();
+
+  // ── Product search + sort ─────────────────────────────────────
   const productList = document.querySelector('.product-list');
   if (!productList) return;
 
@@ -30,18 +42,25 @@ document.addEventListener('DOMContentLoaded', () => {
   function getName(card) {
     const nameEl = card.querySelector('.card__name');
     const brandEl = card.querySelector('.card__brand');
-    return ((nameEl ? nameEl.textContent : '') + ' ' + (brandEl ? brandEl.textContent : '')).toLowerCase();
+    return (
+      (nameEl ? nameEl.textContent : '') +
+      ' ' +
+      (brandEl ? brandEl.textContent : '')
+    ).toLowerCase();
   }
 
   /**
    * Re-render the product list based on current filter + sort state.
    */
   function applyFilterAndSort() {
-    const query = document.getElementById('product-search').value.toLowerCase().trim();
+    const query = document
+      .getElementById('product-search')
+      .value.toLowerCase()
+      .trim();
     const sortVal = document.getElementById('product-sort').value;
 
     // Filter
-    let filtered = allCards.filter(card => getName(card).includes(query));
+    let filtered = allCards.filter((card) => getName(card).includes(query));
 
     // Sort
     if (sortVal === 'price-asc') {
@@ -60,11 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
       empty.textContent = 'No products match your search.';
       productList.appendChild(empty);
     } else {
-      filtered.forEach(card => productList.appendChild(card));
+      filtered.forEach((card) => productList.appendChild(card));
     }
   }
 
   // Attach event listeners to the controls
-  document.getElementById('product-search').addEventListener('input', applyFilterAndSort);
-  document.getElementById('product-sort').addEventListener('change', applyFilterAndSort);
+  document
+    .getElementById('product-search')
+    .addEventListener('input', applyFilterAndSort);
+  document
+    .getElementById('product-sort')
+    .addEventListener('change', applyFilterAndSort);
 });
+
