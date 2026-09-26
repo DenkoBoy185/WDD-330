@@ -41,3 +41,20 @@ export function renderListWithTemplate(
   const htmlStrings = list.map(templateFn);
   parentElement.insertAdjacentHTML(position, htmlStrings.join(''));
 }
+// update the cart count badge
+export function updateCartCount() {
+  const cartItems = getLocalStorage('so-cart');
+  let count = 0;
+  if (cartItems) {
+    count = cartItems.length;
+  }
+  const badge = document.querySelector('.cart-count');
+  if (badge) {
+    badge.textContent = count;
+    if (count > 0) {
+      badge.classList.remove('hide');
+    } else {
+      badge.classList.add('hide');
+    }
+  }
+}

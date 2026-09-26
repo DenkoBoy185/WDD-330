@@ -1,4 +1,4 @@
-import { setLocalStorage, getLocalStorage } from './utils.mjs';
+import { setLocalStorage, getLocalStorage, updateCartCount } from './utils.mjs';
 
 export default class ProductDetails {
   constructor(productId, dataSource) {
@@ -20,6 +20,18 @@ export default class ProductDetails {
     }
     cartItems.push(this.product);
     setLocalStorage('so-cart', cartItems);
+    updateCartCount();
+    this.showAddedMessage();
+  }
+  showAddedMessage() {
+    const btn = document.getElementById('addToCart');
+    const original = btn.textContent;
+    btn.textContent = 'Added! ✓';
+    btn.classList.add('cart-added');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('cart-added');
+    }, 1500);
   }
   renderProductDetails() {
     document.querySelector('#productName').textContent =
